@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Rabbit Hole - Phase 1: Door 3 Reset</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #121418; 
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .game-card {
+      background: #1e222b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      max-width: 650px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      user-select: none; 
+    }
+
+    .timer-box {
+      color: #ff3333;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 15px;
+      background: #111317;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 51, 51, 0.2);
+      display: inline-block;
+    }
+
+    .phase-banner {
+      color: #ffffff;
+      background-color: #111317;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 20px;
+      display: inline-block;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      font-size: 24px;
+      letter-spacing: 2px;
+      color: #ffffff;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .stage-img {
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      border-radius: 8px;
+      margin: 0 auto 20px auto;
+      display: block;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .narrative-box {
+      background-color: #111317;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 24px;
+      text-align: center;
+      position: relative;
+    }
+
+    .narrative {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    /* Updated styling for the glowing green button effect on hover */
+    .real-key {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .real-key:hover {
+      background-color: #00ff66;
+      color: #111317;
+      font-weight: bold;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.6);
+    }
+
+    .decoy-btn {
+      color: #1e222b;
+      background-color: #1e222b;
+      border: 1px solid #1e222b;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      margin: 5px;
+      transition: none;
+    }
+
+    .decoy-btn:hover {
+      background-color: #1e222b;
+      border-color: #1e222b;
+      color: #1e222b;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="game-card">
+    <div>
+      <div class="timer-box">
+        ⚠️ TIME REMAINING: <span id="timer">60</span>s
+      </div>
+    </div>
+
+    <div class="phase-banner">
+      Phase 1: The Rabbit Hole
+    </div>
+
+    <h1>Door 3</h1>
+
+    <img src="img/The Rabbit Hole.png" alt="Stage One: Rabbit Hole Door 3 Reset" class="stage-img">
+
+    <div class="narrative-box">
+      <p class="narrative">
+        You seem lost. Click somewhere AROUND <a href="Mad Tea Party 2.html" class="real-key">or</a> IN this text to 
+        continue before time runs out and RESETS THE GAME!
+      </p>
+    </div>
+
+    <div class="choices-container">
+      <button class="decoy-btn" onclick="triggerTrap()">CLICK HERE TO CONTINUE</button>
+      <button class="decoy-btn" onclick="triggerTrap()">CLICK HERE TO CONTINUE</button>
+      <button class="decoy-btn" onclick="triggerTrap()">CLICK HERE TO CONTINUE</button>
+      <button class="decoy-btn" onclick="triggerTrap()">CLICK HERE TO CONTINUE</button>
+      <button class="decoy-btn" onclick="triggerTrap()">CLICK HERE TO CONTINUE</button>
+      <button class="decoy-btn" onclick="triggerTrap()">CLICK HERE TO CONTINUE</button>
+    </div>
+  </main>
+
+  <script>
+    let seconds = 60;
+    const timerElement = document.getElementById('timer');
+    
+    const countdown = setInterval(() => {
+      seconds--;
+      if (timerElement) {
+        timerElement.textContent = seconds;
+      }
+      if (seconds <= 0) {
+        clearInterval(countdown);
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+
+    function triggerTrap() {
+      seconds = Math.max(1, seconds - 5); 
+      if (timerElement) {
+        timerElement.textContent = seconds;
+      }
+      alert("WRONG SPOT! 5 seconds deducted!");
+    }
+  </script>
+  
+</body>
+</html>
