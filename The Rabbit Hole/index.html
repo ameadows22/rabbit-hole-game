@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Rabbit Hole - Stage One</title>
+  
+  <audio id="trap-sfx" src="" preload="auto"></audio>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #121418; 
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow: hidden; 
+    }
+
+    #bg-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; 
+      pointer-events: none; 
+    }
+
+    #scan-line {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: rgba(46, 186, 0, 0.8);
+      box-shadow: 0 0 15px #2eba00, 0 0 30px #2eba00;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .scanning {
+      animation: scan 0.8s ease-in-out forwards;
+    }
+
+    #start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #121418;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    #start-screen.entrance-exit {
+      opacity: 0;
+      transform: scale(1.15);
+      filter: blur(8px) contrast(150%);
+    }
+
+    .start-card {
+      background: #1e222b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .start-card h2 {
+      color: #2eba00;
+      margin-bottom: 15px;
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .start-card p {
+      color: #cccccc;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .game-card {
+      position: relative;
+      z-index: 1; 
+      background: #1e222b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      max-width: 650px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      
+      opacity: 0;
+      transform: scale(0.9) translateY(30px);
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s ease;
+    }
+
+    .game-card.stage-enter {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    .warning-banner {
+      color: #ffffff;
+      background-color: #d83d3d;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: #2eba00; 
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .stage-img {
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      border-radius: 8px;
+      margin: 0 auto 20px auto;
+      display: block;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    .narrative {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #cccccc;
+      margin-bottom: 28px;
+    }
+
+    .choices-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .custom-btn {
+      padding: 14px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      color: #ffffff;
+      background-color: #2eba00;
+      border: 2px solid #2eba00;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+      flex: 1 1 200px; 
+      max-width: 280px;
+    }
+
+    .custom-btn:hover {
+      background-color: #000000;
+      color: #2eba00;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(46, 186, 0, 0.3);
+    }
+
+    .custom-btn:active {
+      transform: translateY(0);
+    }
+
+    .pulse-btn {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(46, 186, 0, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(46, 186, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(46, 186, 0, 0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="scan-line"></div>
+
+  <div id="start-screen">
+    <div class="start-card">
+      <div class="warning-banner">⚠️ Epilepsy Warning</div>
+      <h2>The Rabbit Hole</h2>
+      <p>This experience contains flashing visuals and particle effects.
+        Click the button below when you are ready to enter the Rabbit Hole. </p>
+      <button class="custom-btn pulse-btn" id="start-btn">START GAME</button>
+    </div>
+  </div>
+
+  <canvas id="bg-canvas"></canvas>
+
+  <main class="game-card" id="game-card">
+
+
+    <h1>A Choice Awaits</h1>
+
+    <img src="img/The Rabbit Hole.png" alt="Stage One: The Rabbit Hole" class="stage-img">
+
+    <p class="narrative">
+      This is the Rabbit Hole. You have fallen and there seems to be no end in sight. 
+      Everything around you is a blur of colors and shapes, making it hard to discern reality from illusion. 
+      Try to find your way out and try not to get lost forever...
+    </p>
+
+    <div class="choices-container">
+      <button class="custom-btn" onclick="window.location.href='Mad Tea Party.html';">
+        REACH FOR A GLASS OF TEA
+      </button>
+      <button class="custom-btn" onclick="window.location.href='Long Hall.html';">
+        KEEP FALLING TILL YOU LAND
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const particlesArray = [];
+    const numberOfParticles = 50;
+    let particleSpeedMultiplier = 1;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1; 
+        this.speedY = Math.random() * 1 - 0.5; 
+        this.speedX = Math.random() * 1 - 0.5; 
+        this.opacity = Math.random() * 0.5 + 0.1; 
+      }
+      update() {
+        this.y += this.speedY * particleSpeedMultiplier;
+        this.x += this.speedX * particleSpeedMultiplier;
+
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+      }
+      draw() {
+        ctx.fillStyle = `rgba(46, 186, 0, ${this.opacity})`; 
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particlesArray.length = 0;
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+    initParticles();
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    const startBtn = document.getElementById('start-btn');
+    const startScreen = document.getElementById('start-screen');
+    const gameCard = document.getElementById('game-card');
+    const scanLine = document.getElementById('scan-line');
+    const trapSfx = document.getElementById('trap-sfx');
+
+    startBtn.addEventListener('click', () => {
+      if (trapSfx && trapSfx.src) {
+        trapSfx.play().catch(() => {});
+      }
+
+      particleSpeedMultiplier = 8;
+      setTimeout(() => { particleSpeedMultiplier = 1; }, 1200);
+
+      scanLine.classList.add('scanning');
+
+      startScreen.classList.add('entrance-exit');
+
+      setTimeout(() => {
+        startScreen.style.display = 'none';
+        gameCard.classList.add('stage-enter');
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>

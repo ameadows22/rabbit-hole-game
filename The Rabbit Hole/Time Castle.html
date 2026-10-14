@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Rabbit Hole - Phase 4: The Time Castle</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #121418; 
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden; 
+      padding: 10px;
+    }
+
+    .game-card {
+      background: #1e222b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timer-box {
+      color: #ff3333;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 12px;
+      background: #111317;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 51, 51, 0.2);
+    }
+
+    .phase-banner {
+      color: #ffffff;
+      background-color: #111317;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .banner-key-btn {
+      color: #111317; 
+      background-color: #111317;
+      border: 1px solid #111317;
+      padding: 2px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .banner-key-btn:hover {
+      color: #2eba00;
+      border-color: #2eba00;
+      background-color: #1a221a;
+      box-shadow: 0 0 8px rgba(46, 186, 0, 0.4);
+    }
+
+    h1 {
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .stage-img {
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .narrative-box {
+      background-color: #111317;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+      width: 100%;
+    }
+
+    .narrative {
+      font-size: 13px;
+      line-height: 1.4;
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="game-card">
+    <div class="timer-box">
+      ⚠️ TIME REMAINING: <span id="timer">20</span>s
+    </div>
+
+    <div class="phase-banner">
+      <span>Phase 4: The Time Castle</span>
+      <button class="banner-key-btn" onclick="window.location.href='Long Hall 2.html';">THE KEY</button>
+    </div>
+
+    <h1>Door 1</h1>
+
+    <img src="img/Time Castle.png" alt="Stage Four: The Time Castle" class="stage-img">
+
+    <div class="narrative-box">
+      <p class="narrative">
+        You need to navigate the Time Castle carefully and find the hidden text 
+        that reads "THE KEY" to get out of the room. 
+        Move quickly before time runs out and RESTARTS THE GAME!
+      </p>
+    </div>
+  </main>
+
+  <script>
+    let seconds = 20;
+    const timerElement = document.getElementById('timer');
+    
+    const countdown = setInterval(() => {
+      seconds--;
+      timerElement.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(countdown);
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+  </script>
+
+</body>
+</html>
